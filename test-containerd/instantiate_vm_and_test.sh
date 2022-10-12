@@ -76,10 +76,16 @@ sleep 360
 
 TIMEOUT=10
 i=0
+k=0
 mkdir -p ~/.ssh
+while [ $k -lt $TIMEOUT ] && ! ssh-keyscan -t rsa $IP >> ~/.ssh/known_hosts
+do
+  k=$((k+1))
+  sleep 60
+done
+
 while [ $i -lt $TIMEOUT ] && ! ssh ubuntu@$IP -i /etc/ssh-volume/ssh-privatekey echo OK
 do
-  ssh-keyscan -t rsa $IP >> ~/.ssh/known_hosts
   i=$((i+1))
   sleep 60
 done
@@ -100,9 +106,9 @@ if [ "$i" == "$TIMEOUT" ]; then
 fi
 
 # Get test script and execute it
-ssh ubuntu@$IP -i /etc/ssh-volume/ssh-privatekey wget https://raw.githubusercontent.com/ppc64le-cloud/docker-ce-build/main/test-containerd/test_on_powervs.sh
-ssh ubuntu@$IP -i /etc/ssh-volume/ssh-privatekey sudo bash test_on_powervs.sh $RUNC_FLAVOR $TEST_RUNTIME
-scp -i /etc/ssh-volume/ssh-privatekey "ubuntu@$IP:/home/containerd_test/containerd/*.xml" ${OUTPUT}
+# ssh ubuntu@$IP -i /etc/ssh-volume/ssh-privatekey wget https://raw.githubusercontent.com/ppc64le-cloud/docker-ce-build/main/test-containerd/test_on_powervs.sh
+# ssh ubuntu@$IP -i /etc/ssh-volume/ssh-privatekey sudo bash test_on_powervs.sh $RUNC_FLAVOR $TEST_RUNTIME
+# scp -i /etc/ssh-volume/ssh-privatekey "ubuntu@$IP:/home/containerd_test/containerd/*.xml" ${OUTPUT}
 
 # Ensure we are yet connected
 echo "" | ibmcloud login
