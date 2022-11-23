@@ -47,12 +47,15 @@ if [ -z $NETWORK ]; then echo "FAIL: Network not fulfilled."; usage; exit 1; fi
 
 # Create a machine
 # Sometime fail, but the machine is correctly instanciated
-ibmcloud pi instance-create $NAME --image ubuntu_2004_tier1 --key-name $SSH_KEY --memory 8 --processor-type shared --processors '0.5' --network $NETWORK --storage-type tier1 || true
+RAND_VAL=$(head -c 64 /dev/urandom | base64 | tr -dc [:alnum:] | head -c 10; echo)
+NAME="$NAME-$RAND_VAL"
+
+ID=$(ibmcloud pi instance-create $NAME --image ubuntu_2004_tier1 --key-name $SSH_KEY --memory 8 --processor-type shared --processors '0.5' --network $NETWORK --storage-type tier1 | grep ID | awk '{print $2}') || true
 
 # Wait it is registred
 sleep 120
 # Get PID
-ID=$(ibmcloud pi ins | grep "$NAME" | cut -d ' ' -f1)
+# ID=$(ibmcloud pi ins | grep "$NAME" | cut -d ' ' -f1)
 
 # If no ID, stop with error
 if [ -z "$ID" ]; then echo "FAIL: fail to get ID. Probably VM has not started correctly."; exit 1; fi
