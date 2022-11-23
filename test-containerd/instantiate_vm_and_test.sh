@@ -50,7 +50,7 @@ if [ -z $NETWORK ]; then echo "FAIL: Network not fulfilled."; usage; exit 1; fi
 RAND_VAL=$(head -c 64 /dev/urandom | base64 | tr -dc [:alnum:] | head -c 10; echo)
 NAME="$NAME-$RAND_VAL"
 
-ID=$(ibmcloud pi instance-create $NAME --image ubuntu_2004_tier1 --key-name $SSH_KEY --memory 8 --processor-type shared --processors '0.5' --network $NETWORK --storage-type tier1 | grep ID | awk '{print $2}') || true
+ID=$(ibmcloud pi instance-create $NAME --image ubuntu_2004_tier1 --key-name $SSH_KEY --memory 8 --processor-type shared --processors '0.5' --network $NETWORK --storage-type tier1 | grep -m 1 ID | awk '{print $2}') || true
 
 # Wait it is registred
 sleep 120
