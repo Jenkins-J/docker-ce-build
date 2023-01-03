@@ -68,7 +68,7 @@ unset CGO_ENABLED
 echo "==== INTEGRATION TEST ===="
 GOTEST='gotestsum --' GOTESTSUM_JUNITFILE="junit_test-integration1_$RUNC_FLAVOR-$TEST_RUNTIME.xml" EXTRA_TESTFLAGS="-test.timeout 30m" make integration $TEST_FLAG TESTFLAGS_RACE=-race
 GOTEST='gotestsum --' GOTESTSUM_JUNITFILE="junit_test-integration2_$RUNC_FLAVOR-$TEST_RUNTIME.xml" EXTRA_TESTFLAGS="-test.timeout 30m" TESTFLAGS_PARALLEL=1 make integration $TEST_FLAG
-GOTEST='gotestsum --' GOTESTSUM_JUNITFILE="junit_test-cri-integration_$RUNC_FLAVOR-$TEST_RUNTIME.xml" EXTRA_TESTFLAGS="-test.timeout 30m" CONTAINERD_RUNTIME=$TEST_RUNTIME make cri-integration
+GOTEST='gotestsum --' GOTESTSUM_JUNITFILE="junit_test-cri-integration_$RUNC_FLAVOR-$TEST_RUNTIME.xml" EXTRA_TESTFLAGS="-test.timeout 30m" CONTAINERD_RUNTIME=$TEST_RUNTIME GITHUB_WORKSPACE="$PWD" make cri-integration
 
 echo "==== TEST ===="
 GOTEST='gotestsum --' GOTESTSUM_JUNITFILE="junit_test-simple_$RUNC_FLAVOR-$TEST_RUNTIME.xml" EXTRA_TESTFLAGS="-test.timeout 30m" make test
