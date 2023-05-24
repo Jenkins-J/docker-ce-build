@@ -26,6 +26,10 @@ EOF
 }
 
 function delete_vm() {
+  # Temporarily disable deleting vm to allow live debugging
+  echo "WARNING: VM not deleted. VM left running to allow live debugging."
+  return 0
+
   if [ -z $1 ]; then echo "Nothing to delete. delete_vm requires the vm ID as an argument."; return; fi
 
   # Ensure we are yet connected
